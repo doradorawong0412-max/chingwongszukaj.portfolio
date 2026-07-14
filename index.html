@@ -30,7 +30,7 @@
         margin: 0;
         background: var(--bg);
         color: var(--ink);
-        font-family: "Neue Haas Grotesk Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 300;
         font-size: 15px;
         line-height: 1.5;
         letter-spacing: 0;
@@ -60,66 +60,6 @@
         object-fit: cover;
       }
 
-      .menu-toggle {
-        position: fixed;
-        top: 22px;
-        left: 22px;
-        z-index: 40;
-        display: inline-grid;
-        place-items: center;
-        width: 54px;
-        height: 54px;
-        border: 1px solid var(--line);
-        background: rgba(5, 5, 5, 0.82);
-        color: var(--accent);
-        backdrop-filter: blur(18px);
-      }
-
-      .menu-toggle::before,
-      .menu-toggle::after {
-        content: "";
-        width: 18px;
-        height: 1px;
-        background: currentColor;
-        box-shadow: 0 7px 0 currentColor;
-        transition: transform 180ms ease, box-shadow 180ms ease;
-      }
-
-      .menu-toggle::after {
-        display: none;
-      }
-
-      body.menu-open .menu-toggle::before {
-        transform: rotate(45deg);
-        box-shadow: 0 0 0 currentColor;
-      }
-
-      body.menu-open .menu-toggle::after {
-        display: block;
-        position: absolute;
-        transform: rotate(-45deg);
-      }
-
-      .sidebar {
-        position: fixed;
-        inset: 0 auto 0 0;
-        z-index: 30;
-        display: grid;
-        width: min(390px, calc(100vw - 28px));
-        padding: 104px 28px 28px;
-        border-right: 1px solid var(--line);
-        background: rgba(5, 5, 5, 0.96);
-        backdrop-filter: blur(22px);
-        transform: translateX(-100%);
-        transition: transform 260ms ease;
-      }
-
-      body.menu-open .sidebar {
-        transform: translateX(0);
-      }
-
-      .side-kicker,
-      .side-note,
       .project-type,
       .section-label,
       .image-count {
@@ -130,50 +70,6 @@
         letter-spacing: 0.08em;
       }
 
-      .side-name {
-        display: block;
-        margin-top: 12px;
-        color: var(--ink);
-        font-size: 30px;
-        font-weight: 300;
-        line-height: 1.02;
-      }
-
-      .side-nav {
-        align-self: center;
-        display: grid;
-        gap: 14px;
-      }
-
-      .side-nav a {
-        display: grid;
-        grid-template-columns: 34px 1fr;
-        gap: 12px;
-        align-items: baseline;
-        padding: 12px 0;
-        border-bottom: 1px solid var(--line);
-        color: var(--muted);
-        font-size: 17px;
-        transition: color 180ms ease;
-      }
-
-      .side-nav a:hover,
-      .side-nav a:focus-visible {
-        color: var(--accent);
-      }
-
-      .side-nav span:first-child {
-        color: var(--quiet);
-        font-size: 10px;
-      }
-
-      .side-footer {
-        align-self: end;
-        display: grid;
-        gap: 13px;
-      }
-
-      .side-footer a,
       .contact-link {
         width: max-content;
         border-bottom: 1px solid var(--accent);
@@ -188,48 +84,130 @@
       }
 
       .home {
+        --cursor-x: 0px;
+        --cursor-y: 0px;
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
         min-height: 100vh;
         display: grid;
-        grid-template-rows: auto 1fr;
-        gap: 28px;
-        padding: 32px 32px 28px 96px;
+        grid-template-rows: 1fr;
+        gap: 20px;
+        padding: clamp(24px, 3.2vw, 48px);
+        background: #050505;
       }
 
       .home-head {
+        position: relative;
+        min-height: clamp(560px, 74vh, 850px);
+      }
+
+      .editorial-nav {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+      }
+
+      .editorial-link {
+        --float-x: 0px;
+        --float-y: 0px;
         display: flex;
-        align-items: end;
-        min-height: 128px;
-        padding-bottom: 24px;
-        border-bottom: 1px solid var(--line);
+        align-items: flex-end;
+        padding: 18px 20px;
+        color: #160d10;
+        font-size: clamp(16px, 1.6vw, 25px);
+        font-weight: 500;
+        line-height: 1;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
+        opacity: 0;
+        transition: box-shadow 220ms ease, filter 220ms ease;
+      }
+
+      .editorial-link:nth-child(1) {
+        position: absolute;
+        top: 7%;
+        right: 4%;
+        width: clamp(190px, 20vw, 310px);
+        height: clamp(105px, 15vh, 160px);
+        background: #e4b7bd;
+        transform: translate(var(--float-x), var(--float-y)) rotate(2.5deg);
+        animation: paperWork 760ms 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      .editorial-link:nth-child(2) {
+        position: absolute;
+        right: 20%;
+        bottom: 9%;
+        width: clamp(160px, 17vw, 260px);
+        height: clamp(135px, 19vh, 205px);
+        background: #a67591;
+        color: #fff7f3;
+        transform: translate(var(--float-x), var(--float-y)) rotate(-3.5deg);
+        animation: paperAbout 820ms 440ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      .editorial-link:nth-child(3) {
+        position: absolute;
+        right: 0;
+        bottom: 34%;
+        width: clamp(210px, 24vw, 360px);
+        height: clamp(82px, 11vh, 120px);
+        background: #7b3349;
+        color: #fff1ed;
+        transform: translate(var(--float-x), var(--float-y)) rotate(1deg);
+        animation: paperContact 790ms 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      .editorial-link:hover,
+      .editorial-link:focus-visible {
+        filter: saturate(1.08) brightness(1.04);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.3);
+        outline: none;
+      }
+
+      .editorial-link:focus-visible {
+        box-shadow: 0 0 0 3px #050505, 0 0 0 5px #fff5f0, 0 18px 48px rgba(0, 0, 0, 0.3);
       }
 
       h1 {
-        max-width: 980px;
+        position: absolute;
+        z-index: 3;
+        top: 44%;
+        left: 0;
         margin: 0;
-        font-size: clamp(64px, 12vw, 184px);
+        transform: translateY(-50%);
+        font-size: clamp(74px, 12.5vw, 190px);
+        font-weight: 400;
+        line-height: 0.78;
+        letter-spacing: -0.055em;
+        width: max-content;
+      }
+
+      .hero-ching,
+      .hero-wong {
+        position: relative;
+        z-index: 2;
+        display: block;
+      }
+
+      .hero-wong {
+        margin-left: 0.3em;
+      }
+
+      .hero-mark {
+        position: absolute;
+        top: -0.18em;
+        right: -0.75em;
+        color: #e4b7bd;
+        font-size: 0.18em;
         font-weight: 300;
-        line-height: 0.88;
         letter-spacing: 0;
       }
 
       .slideshow {
         display: none;
-      }
-
-      .home-intro {
-        align-self: end;
-        max-width: 720px;
-        display: grid;
-        gap: 24px;
-        padding-bottom: 42px;
-      }
-
-      .home-intro p {
-        margin: 0;
-        color: var(--muted);
-        font-size: clamp(22px, 3.2vw, 48px);
-        font-weight: 300;
-        line-height: 1.08;
       }
 
       .view-work {
@@ -405,22 +383,24 @@
       }
 
       @media (max-width: 980px) {
-        .home,
         .section {
           padding-right: 16px;
           padding-left: 16px;
         }
 
         .home {
-          padding-top: 92px;
+          padding: 24px;
         }
 
-        .home-head,
         .section-head,
         .project-detail,
         .contact-layout,
         .cv-list {
           grid-template-columns: 1fr;
+        }
+
+        .editorial-link:nth-child(2) {
+          right: 13%;
         }
 
         .project-index {
@@ -441,15 +421,39 @@
       }
 
       @media (max-width: 560px) {
-        .menu-toggle {
-          top: 16px;
-          left: 16px;
-          width: 48px;
-          height: 48px;
+        .home {
+          min-height: 100svh;
+          padding: 18px;
+        }
+
+        .home-head {
+          min-height: 690px;
         }
 
         h1 {
-          font-size: clamp(58px, 18vw, 88px);
+          top: 22%;
+          font-size: clamp(62px, 21vw, 96px);
+        }
+
+        .editorial-link:nth-child(1) {
+          top: 37%;
+          right: -2%;
+          width: 55vw;
+          height: 112px;
+        }
+
+        .editorial-link:nth-child(2) {
+          right: 2%;
+          bottom: 2%;
+          width: 45vw;
+          height: 142px;
+        }
+
+        .editorial-link:nth-child(3) {
+          right: 23%;
+          bottom: 27%;
+          width: 61vw;
+          height: 88px;
         }
 
         .project-index,
@@ -474,47 +478,30 @@
       main > * { animation: contentRise 680ms cubic-bezier(0.22, 1, 0.36, 1) both; }
       main > *:nth-child(2) { animation-delay: 80ms; }
       main > *:nth-child(3) { animation-delay: 150ms; }
-      .side-nav a:hover, .side-nav a:focus-visible, .back-link:hover, .contact-link:hover, .view-work:hover { transform: translateX(4px); }
+      .back-link:hover, .contact-link:hover, .view-work:hover { transform: translateX(4px); }
       .project-card:hover, .photo-button:hover, .poster:hover { transform: translateY(-3px); }
       .board:hover img, .poster:hover img, .hero-image:hover img { transform: scale(1.015); }
-      .menu-toggle:hover { border-color: var(--accent); transform: rotate(2deg); }
        @keyframes pageFade { from { opacity: 0; } to { opacity: 1; } }
-       @keyframes contentRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes contentRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes paperWork { from { opacity: 0; transform: translate(calc(80px + var(--float-x)), calc(-45px + var(--float-y))) rotate(8deg); } to { opacity: 1; transform: translate(var(--float-x), var(--float-y)) rotate(2.5deg); } }
+      @keyframes paperAbout { from { opacity: 0; transform: translate(calc(-45px + var(--float-x)), calc(70px + var(--float-y))) rotate(-9deg); } to { opacity: 1; transform: translate(var(--float-x), var(--float-y)) rotate(-3.5deg); } }
+      @keyframes paperContact { from { opacity: 0; transform: translate(calc(90px + var(--float-x)), var(--float-y)) rotate(5deg); } to { opacity: 1; transform: translate(var(--float-x), var(--float-y)) rotate(1deg); } }
        @media (prefers-reduced-motion: reduce) { body, main > * { animation: none !important; } }
     </style>
   </head>
   <body>
-    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"></button>
-
-    <aside class="sidebar" aria-label="Portfolio menu">
-      <a class="side-brand" href="#home">
-        <span class="side-kicker">Graphic Design</span>
-        <span class="side-name">Ching Wong</span>
-      </a>
-
-      <nav class="side-nav" aria-label="Main navigation">
-        <a href="projects.html"><span>01</span><span>Projects</span></a>
-        <a href="photography.html"><span>02</span><span>Photography</span></a>
-        <a href="about.html"><span>03</span><span>About</span></a>
-        <a href="contact.html"><span>04</span><span>Contact</span></a>
-        <a href="cv.html"><span>05</span><span>CV</span></a>
-      </nav>
-
-      <div class="side-footer">
-        <span class="side-note">Identity / Editorial / Print</span>
-        <a href="mailto:orfediawong@icloud.com">orfediawong@icloud.com</a>
-      </div>
-    </aside>
-
     <main class="page">
       <section class="home" id="home" aria-labelledby="page-title">
         <div class="home-head">
-          <h1 id="page-title">Ching Wong</h1>
-        </div>
-
-        <div class="home-intro">
-          <p>Graphic design, identity, editorial, and print work with a clean black editorial frame.</p>
-          <a class="view-work" href="projects.html">View selected work</a>
+          <h1 id="page-title">
+            <span class="hero-ching">Ching</span><span class="hero-wong">Wong</span>
+            <span class="hero-mark" aria-hidden="true">婧</span>
+          </h1>
+          <nav class="editorial-nav" aria-label="Main navigation">
+            <a class="editorial-link" href="projects.html" data-drift="1">Work</a>
+            <a class="editorial-link" href="about.html" data-drift="0.65">About</a>
+            <a class="editorial-link" href="contact.html" data-drift="0.82">Contact</a>
+          </nav>
         </div>
       </section>
 
@@ -709,24 +696,13 @@
     </main>
 
     <script>
-      const menuButton = document.querySelector(".menu-toggle");
-      const navLinks = Array.from(document.querySelectorAll(".side-nav a, .side-brand"));
       const projectCards = Array.from(document.querySelectorAll(".project-card"));
       const projectPages = Array.from(document.querySelectorAll("[data-project-page]"));
-
-      function setMenu(open) {
-        document.body.classList.toggle("menu-open", open);
-        menuButton.setAttribute("aria-expanded", String(open));
-        menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-      }
 
       function showProject(next) {
         projectCards.forEach((card, index) => card.classList.toggle("is-active", index === next));
         projectPages.forEach((page, index) => page.classList.toggle("is-active", index === next));
       }
-
-      menuButton.addEventListener("click", () => setMenu(!document.body.classList.contains("menu-open")));
-      navLinks.forEach((link) => link.addEventListener("click", () => setMenu(false)));
 
       projectCards.forEach((card) => {
         card.addEventListener("click", () => {
@@ -746,6 +722,34 @@
           });
         });
       });
+
+      const hero = document.querySelector(".home");
+      const floatingLabels = Array.from(document.querySelectorAll(".editorial-link[data-drift]"));
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      if (hero && !reduceMotion.matches) {
+        hero.addEventListener("pointermove", (event) => {
+          const bounds = hero.getBoundingClientRect();
+          const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+          const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+          hero.style.setProperty("--cursor-x", `${x * 7}px`);
+          hero.style.setProperty("--cursor-y", `${y * 7}px`);
+          floatingLabels.forEach((label) => {
+            const drift = Number(label.dataset.drift);
+            label.style.setProperty("--float-x", `${x * 10 * drift}px`);
+            label.style.setProperty("--float-y", `${y * 8 * drift}px`);
+          });
+        });
+
+        hero.addEventListener("pointerleave", () => {
+          hero.style.setProperty("--cursor-x", "0px");
+          hero.style.setProperty("--cursor-y", "0px");
+          floatingLabels.forEach((label) => {
+            label.style.setProperty("--float-x", "0px");
+            label.style.setProperty("--float-y", "0px");
+          });
+        });
+      }
 
     </script>
   </body>
