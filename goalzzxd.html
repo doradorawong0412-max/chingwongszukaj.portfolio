@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>goalzzxd - Ching Wong</title>
+    <style>
+      :root {
+        --bg: #050505;
+        --ink: #f4f1e8;
+        --muted: #a7a49c;
+        --quiet: #5d5a54;
+        --line: rgba(244, 241, 232, 0.18);
+        --accent: #e6c2bf;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Neue Haas Grotesk Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.5;
+        letter-spacing: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a,
+      button {
+        color: inherit;
+        font: inherit;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      button {
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      img,
+      video {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .menu-toggle {
+        position: fixed;
+        top: 22px;
+        left: 22px;
+        z-index: 40;
+        display: inline-grid;
+        place-items: center;
+        width: 54px;
+        height: 54px;
+        border: 1px solid var(--line);
+        background: rgba(5, 5, 5, 0.82);
+        color: var(--accent);
+        backdrop-filter: blur(18px);
+      }
+
+      .menu-toggle::before,
+      .menu-toggle::after {
+        content: "";
+        width: 18px;
+        height: 1px;
+        background: currentColor;
+        box-shadow: 0 7px 0 currentColor;
+      }
+
+      .menu-toggle::after {
+        display: none;
+      }
+
+      body.menu-open .menu-toggle::before {
+        transform: rotate(45deg);
+        box-shadow: 0 0 0 currentColor;
+      }
+
+      body.menu-open .menu-toggle::after {
+        display: block;
+        position: absolute;
+        transform: rotate(-45deg);
+      }
+
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 30;
+        display: grid;
+        width: min(390px, calc(100vw - 28px));
+        padding: 104px 28px 28px;
+        border-right: 1px solid var(--line);
+        background: rgba(5, 5, 5, 0.96);
+        backdrop-filter: blur(22px);
+        transform: translateX(-100%);
+        transition: transform 260ms ease;
+      }
+
+      body.menu-open .sidebar {
+        transform: translateX(0);
+      }
+
+      .side-kicker,
+      .side-note,
+      .project-type {
+        color: var(--quiet);
+        font-size: 10px;
+        line-height: 1.1;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .side-name {
+        display: block;
+        margin-top: 12px;
+        color: var(--ink);
+        font-size: 30px;
+        font-weight: 300;
+        line-height: 1.02;
+      }
+
+      .side-nav {
+        align-self: center;
+        display: grid;
+        gap: 14px;
+      }
+
+      .side-nav a {
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        gap: 12px;
+        align-items: baseline;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 17px;
+      }
+
+      .side-nav a:hover,
+      .side-nav a:focus-visible {
+        color: var(--accent);
+      }
+
+      .side-nav span:first-child {
+        color: var(--quiet);
+        font-size: 10px;
+      }
+
+      .side-footer {
+        align-self: end;
+        display: grid;
+        gap: 13px;
+      }
+
+      .side-footer a,
+      .back-link {
+        width: max-content;
+        border-bottom: 1px solid var(--accent);
+        color: var(--accent);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      main {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.34fr);
+        gap: 22px;
+        padding: 32px 32px 32px 96px;
+      }
+
+      .project-heading {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 28px;
+        align-items: end;
+        min-height: 128px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .gallery {
+        min-height: calc(100vh - 214px);
+        display: grid;
+        grid-template-rows: 1fr auto;
+        gap: 12px;
+      }
+
+      .gallery-stage {
+        position: relative;
+        overflow: hidden;
+        min-height: 620px;
+        background: transparent;
+      }
+
+      .gallery-image {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .gallery-image.is-active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .gallery-controls {
+        display: grid;
+        grid-template-columns: 54px 1fr 54px;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .gallery-arrow {
+        min-height: 46px;
+        border: 1px solid var(--line);
+        background: #0b0b0b;
+        color: var(--muted);
+        font-size: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .gallery-arrow:hover,
+      .gallery-arrow:focus-visible {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .gallery-counter {
+        display: grid;
+        place-items: center;
+        min-height: 46px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .project-panel {
+        display: grid;
+        align-content: end;
+        gap: 12px;
+        min-height: calc(100vh - 214px);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(46px, 8vw, 124px);
+        font-weight: 300;
+        line-height: 0.88;
+        text-transform: uppercase;
+      }
+
+      .text-box {
+        padding: 15px;
+        border: 1px solid var(--line);
+      }
+
+      .text-box h2,
+      .text-box h3 {
+        margin: 0 0 18px;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 1.1;
+      }
+
+      .text-box p,
+      .text-box ul {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .text-box ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .text-box li + li {
+        margin-top: 7px;
+      }
+
+      @media (max-width: 980px) {
+        main {
+          grid-template-columns: 1fr;
+          padding: 92px 16px 24px;
+        }
+
+        .project-heading {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+
+        .gallery,
+        .project-panel {
+          min-height: auto;
+        }
+
+        .gallery-stage {
+          min-height: 62vh;
+        }
+      }
+      body { animation: pageFade 520ms ease both; }
+      a, button, .project-card, .photo-button, .poster, .board img, .gallery-image img, .gallery-image video { transition: transform 220ms ease, opacity 220ms ease, filter 220ms ease, border-color 220ms ease, color 220ms ease, background 220ms ease; }
+      main > * { animation: contentRise 680ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+      main > *:nth-child(2) { animation-delay: 80ms; }
+      main > *:nth-child(3) { animation-delay: 150ms; }
+      .side-nav a:hover, .side-nav a:focus-visible, .back-link:hover, .contact-link:hover, .view-work:hover { transform: translateX(4px); }
+      .project-card:hover, .photo-button:hover, .poster:hover { transform: translateY(-3px); }
+      .board:hover img, .poster:hover img, .hero-image:hover img { transform: scale(1.015); }
+      .menu-toggle:hover { border-color: var(--accent); transform: rotate(2deg); }
+       @keyframes pageFade { from { opacity: 0; } to { opacity: 1; } }
+       @keyframes contentRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+       @media (prefers-reduced-motion: reduce) { body, main > * { animation: none !important; } }
+    </style>
+  </head>
+  <body>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"></button>
+
+    <aside class="sidebar" aria-label="Portfolio menu">
+      <a class="side-brand" href="index.html">
+        <span class="side-kicker">Graphic Design</span>
+        <span class="side-name">Ching Wong</span>
+      </a>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a href="projects.html"><span>01</span><span>Projects</span></a>
+        <a href="photography.html"><span>02</span><span>Photography</span></a>
+        <a href="about.html"><span>03</span><span>About</span></a>
+        <a href="contact.html"><span>04</span><span>Contact</span></a>
+        <a href="cv.html"><span>05</span><span>CV</span></a>
+      </nav>
+      <div class="side-footer">
+        <span class="side-note">Identity / Editorial / Print</span>
+        <a href="mailto:orfediawong@icloud.com">orfediawong@icloud.com</a>
+      </div>
+    </aside>
+
+    <main>
+      <div class="project-heading">
+        <h1>GOALZZXD</h1>
+        <a class="back-link" href="projects.html">Back to projects</a>
+      </div>
+
+      <section class="gallery" data-gallery aria-label="goalzzxd project gallery">
+        <div class="gallery-stage">
+          <figure class="gallery-image is-active"><img src="assets/goalzzxd/1.png" alt="goalzzxd project image 1" /></figure>
+          <figure class="gallery-image"><video src="assets/goalzzxd/2.mp4" poster="assets/goalzzxd/2.png" muted loop playsinline controls aria-label="goalzzxd video 2"></video></figure>
+          <figure class="gallery-image"><img src="assets/goalzzxd/3.png" alt="goalzzxd project image 3" /></figure>
+          <figure class="gallery-image"><img src="assets/goalzzxd/Typography System.png" alt="goalzzxd typography system" /></figure>
+          <figure class="gallery-image"><video src="assets/goalzzxd/5.mp4" poster="assets/goalzzxd/5.png" muted loop playsinline controls aria-label="goalzzxd video 5"></video></figure>
+          <figure class="gallery-image"><img src="assets/goalzzxd/6.png" alt="goalzzxd project image 6" /></figure>
+          <figure class="gallery-image"><video src="assets/goalzzxd/7.mp4" poster="assets/goalzzxd/7.png" muted loop playsinline controls aria-label="goalzzxd video 7"></video></figure>
+          <figure class="gallery-image"><video src="assets/goalzzxd/Website Navigation.mp4" poster="assets/goalzzxd/Website Navigation.png" muted loop playsinline controls aria-label="goalzzxd website navigation video"></video></figure>
+        </div>
+        <div class="gallery-controls" aria-label="Navigate GOALZZXD gallery">
+          <button class="gallery-arrow" type="button" data-direction="-1" aria-label="Previous image">&lt;</button>
+          <span class="gallery-counter" id="gallery-counter">01/08</span>
+          <button class="gallery-arrow" type="button" data-direction="1" aria-label="Next image">&gt;</button>
+        </div>
+      </section>
+
+      <aside class="project-panel">
+        <div class="text-box">
+          <h2>Project</h2>
+          <p>
+            GOALZZXD is a personal sports intelligence dashboard that transforms scattered
+            football data into a clean, interactive platform. Designed with a bold editorial
+            aesthetic, it allows users to follow teams, compare performance, track match
+            statistics, and organise personalised insights through an intuitive, data-driven
+            interface. The project combines UI/UX design, branding, information architecture,
+            and responsive web design to make complex sports analytics more accessible and
+            engaging.
+          </p>
+        </div>
+        <div class="text-box">
+          <h3>Details</h3>
+          <ul>
+            <li>Scope: Identity, typography, website direction</li>
+            <li>Format: 1080 x 1350 project frames</li>
+            <li>Assets: 8 selected images</li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+
+    <script>
+      const menuButton = document.querySelector(".menu-toggle");
+      const images = Array.from(document.querySelectorAll(".gallery-image"));
+      const galleryArrows = Array.from(document.querySelectorAll(".gallery-arrow"));
+      const galleryCounter = document.querySelector("#gallery-counter");
+      let activeImage = 0;
+
+      function setMenu(open) {
+        document.body.classList.toggle("menu-open", open);
+        menuButton.setAttribute("aria-expanded", String(open));
+        menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      }
+
+      menuButton.addEventListener("click", () => setMenu(!document.body.classList.contains("menu-open")));
+
+      function updateMedia(activeIndex) {
+        images.forEach((image, index) => {
+          const video = image.querySelector("video");
+          if (!video) return;
+          if (index === activeIndex) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+            video.currentTime = 0;
+          }
+        });
+      }
+
+      function showImage(next) {
+        activeImage = (next + images.length) % images.length;
+        images.forEach((image, index) => image.classList.toggle("is-active", index === activeImage));
+        galleryCounter.textContent = `${String(activeImage + 1).padStart(2, "0")}/${String(images.length).padStart(2, "0")}`;
+        updateMedia(activeImage);
+      }
+
+      galleryArrows.forEach((button) => {
+        button.addEventListener("click", () => {
+          showImage(activeImage + Number(button.dataset.direction));
+        });
+      });
+    </script>
+  </body>
+</html>

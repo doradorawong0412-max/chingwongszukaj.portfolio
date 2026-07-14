@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Root Theory - Ching Wong</title>
+    <style>
+      :root {
+        --bg: #050505;
+        --ink: #f4f1e8;
+        --muted: #a7a49c;
+        --quiet: #5d5a54;
+        --line: rgba(244, 241, 232, 0.18);
+        --accent: #e6c2bf;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Neue Haas Grotesk Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.5;
+        letter-spacing: 0;
+        -webkit-font-smoothing: antialiased;
+        animation: pageFade 520ms ease both;
+      }
+
+      a,
+      button {
+        color: inherit;
+        font: inherit;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      button {
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      a,
+      button,
+      .poster-button,
+      .gallery-image img {
+        transition: transform 220ms ease, opacity 220ms ease, filter 220ms ease, border-color 220ms ease, color 220ms ease, background 220ms ease;
+      }
+
+      .menu-toggle {
+        position: fixed;
+        top: 22px;
+        left: 22px;
+        z-index: 40;
+        display: inline-grid;
+        place-items: center;
+        width: 54px;
+        height: 54px;
+        border: 1px solid var(--line);
+        background: rgba(5, 5, 5, 0.82);
+        color: var(--accent);
+        backdrop-filter: blur(18px);
+      }
+
+      .menu-toggle::before,
+      .menu-toggle::after {
+        content: "";
+        width: 18px;
+        height: 1px;
+        background: currentColor;
+        box-shadow: 0 7px 0 currentColor;
+      }
+
+      .menu-toggle::after {
+        display: none;
+      }
+
+      body.menu-open .menu-toggle::before {
+        transform: rotate(45deg);
+        box-shadow: 0 0 0 currentColor;
+      }
+
+      body.menu-open .menu-toggle::after {
+        display: block;
+        position: absolute;
+        transform: rotate(-45deg);
+      }
+
+      .menu-toggle:hover {
+        border-color: var(--accent);
+        transform: rotate(2deg);
+      }
+
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 30;
+        display: grid;
+        width: min(390px, calc(100vw - 28px));
+        padding: 104px 28px 28px;
+        border-right: 1px solid var(--line);
+        background: rgba(5, 5, 5, 0.96);
+        backdrop-filter: blur(22px);
+        transform: translateX(-100%);
+        transition: transform 260ms ease;
+      }
+
+      body.menu-open .sidebar {
+        transform: translateX(0);
+      }
+
+      .side-kicker,
+      .side-note,
+      .section-label {
+        color: var(--quiet);
+        font-size: 10px;
+        line-height: 1.1;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .side-name {
+        display: block;
+        margin-top: 12px;
+        color: var(--ink);
+        font-size: 30px;
+        font-weight: 300;
+        line-height: 1.02;
+      }
+
+      .side-nav {
+        align-self: center;
+        display: grid;
+        gap: 14px;
+      }
+
+      .side-nav a {
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        gap: 12px;
+        align-items: baseline;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 17px;
+      }
+
+      .side-nav a:hover,
+      .side-nav a:focus-visible,
+      .back-link:hover,
+      .back-link:focus-visible {
+        color: var(--accent);
+        transform: translateX(4px);
+      }
+
+      .side-nav span:first-child {
+        color: var(--quiet);
+        font-size: 10px;
+      }
+
+      .side-footer {
+        align-self: end;
+        display: grid;
+        gap: 13px;
+      }
+
+      .side-footer a,
+      .back-link {
+        width: max-content;
+        border-bottom: 1px solid var(--accent);
+        color: var(--accent);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      main {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.34fr);
+        gap: 22px;
+        padding: 32px 32px 56px 96px;
+      }
+
+      main > * {
+        animation: contentRise 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      main > *:nth-child(2) {
+        animation-delay: 80ms;
+      }
+
+      main > *:nth-child(3) {
+        animation-delay: 150ms;
+      }
+
+      .project-heading {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 28px;
+        align-items: end;
+        min-height: 128px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(46px, 8vw, 124px);
+        font-weight: 300;
+        line-height: 0.88;
+        text-transform: uppercase;
+      }
+
+      .gallery {
+        min-height: calc(100vh - 214px);
+        display: grid;
+        grid-template-rows: 1fr auto;
+        gap: 12px;
+      }
+
+      .gallery-stage {
+        position: relative;
+        overflow: hidden;
+        min-height: 620px;
+        background: transparent;
+      }
+
+      .gallery-image {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .gallery-image.is-active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .gallery-image img {
+        object-fit: contain;
+      }
+
+      .gallery-controls {
+        display: grid;
+        grid-template-columns: 54px 1fr 54px;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .gallery-arrow {
+        min-height: 46px;
+        border: 1px solid var(--line);
+        background: #0b0b0b;
+        color: var(--muted);
+        font-size: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .gallery-arrow:hover,
+      .gallery-arrow:focus-visible {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .gallery-counter {
+        display: grid;
+        place-items: center;
+        min-height: 46px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .project-panel {
+        display: grid;
+        align-content: end;
+        gap: 12px;
+        min-height: calc(100vh - 214px);
+      }
+
+      .text-box {
+        padding: 15px;
+        border: 1px solid var(--line);
+      }
+
+      .text-box h2,
+      .text-box h3 {
+        margin: 0 0 18px;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 1.1;
+      }
+
+      .text-box p,
+      .text-box ul {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .text-box ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .text-box li + li {
+        margin-top: 7px;
+      }
+
+      .poster-section {
+        grid-column: 1 / -1;
+        display: grid;
+        gap: 20px;
+        padding-top: 64px;
+        border-top: 1px solid var(--line);
+      }
+
+      .section-head {
+        display: grid;
+        gap: 12px;
+      }
+
+      .statement {
+        max-width: 980px;
+        margin: 0;
+        font-size: clamp(24px, 3vw, 48px);
+        font-weight: 300;
+        line-height: 1.02;
+      }
+
+      .website-grid,
+      .stationery-grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      .website-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .stationery-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: start;
+      }
+
+      .poster-row {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(220px, 1fr));
+        gap: 20px;
+        align-items: start;
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+
+      .poster-button {
+        overflow: hidden;
+        background: transparent;
+      }
+
+      .poster-button img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+
+      .website-grid .poster-button img {
+        height: 100%;
+      }
+
+      .poster-button:hover,
+      .poster-button:focus-visible {
+        transform: translateY(-3px);
+      }
+
+      .poster-button:hover img,
+      .poster-button:focus-visible img {
+        transform: scale(1.015);
+      }
+
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        display: none;
+        place-items: center;
+        padding: 28px;
+        background: rgba(5, 5, 5, 0.88);
+        backdrop-filter: blur(18px);
+      }
+
+      .lightbox.is-open {
+        display: grid;
+      }
+
+      .lightbox img {
+        width: auto;
+        max-width: min(100%, 980px);
+        max-height: 88vh;
+        object-fit: contain;
+      }
+
+      .lightbox-close {
+        position: fixed;
+        top: 22px;
+        right: 22px;
+        display: grid;
+        place-items: center;
+        width: 54px;
+        height: 54px;
+        border: 1px solid var(--line);
+        background: rgba(5, 5, 5, 0.82);
+        color: var(--accent);
+        font-size: 18px;
+      }
+
+      .lightbox-close:hover,
+      .lightbox-close:focus-visible {
+        border-color: var(--accent);
+        transform: rotate(2deg);
+      }
+
+      @keyframes pageFade {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes contentRise {
+        from { opacity: 0; transform: translateY(18px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (max-width: 980px) {
+        main {
+          grid-template-columns: 1fr;
+          padding: 92px 16px 32px;
+        }
+
+        .project-heading,
+        .section-head {
+          grid-template-columns: 1fr;
+        }
+
+        .website-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+        }
+
+        .stationery-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+        }
+
+        .poster-row {
+          grid-template-columns: repeat(5, minmax(190px, 1fr));
+          gap: 16px;
+        }
+
+        .gallery,
+        .project-panel {
+          min-height: auto;
+        }
+
+        .gallery-stage {
+          min-height: 62vh;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .website-grid,
+        .stationery-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
+        .poster-row {
+          grid-template-columns: repeat(5, minmax(165px, 1fr));
+          gap: 12px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 1ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 1ms !important;
+        }
+
+        body,
+        main > * {
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"></button>
+
+    <aside class="sidebar" aria-label="Portfolio menu">
+      <a class="side-brand" href="index.html">
+        <span class="side-kicker">Graphic Design</span>
+        <span class="side-name">Ching Wong</span>
+      </a>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a href="projects.html"><span>01</span><span>Projects</span></a>
+        <a href="photography.html"><span>02</span><span>Photography</span></a>
+        <a href="about.html"><span>03</span><span>About</span></a>
+        <a href="contact.html"><span>04</span><span>Contact</span></a>
+        <a href="cv.html"><span>05</span><span>CV</span></a>
+      </nav>
+      <div class="side-footer">
+        <span class="side-note">Identity / Editorial / Print</span>
+        <a href="mailto:orfediawong@icloud.com">orfediawong@icloud.com</a>
+      </div>
+    </aside>
+
+    <main>
+      <div class="project-heading">
+        <h1>Root Theory</h1>
+        <a class="back-link" href="projects.html">Back to projects</a>
+      </div>
+
+      <section class="gallery" data-gallery aria-label="Root Theory project slideshow">
+        <div class="gallery-stage">
+          <figure class="gallery-image is-active"><img src="assets/root-theory/cover.png" alt="Root Theory cover image" /></figure>
+          <figure class="gallery-image"><img src="assets/root-theory/about-brand.png" alt="Root Theory brand overview" /></figure>
+          <figure class="gallery-image"><img src="assets/root-theory/about-logo.png" alt="Root Theory logo construction" /></figure>
+          <figure class="gallery-image"><img src="assets/root-theory/logo-variations.png" alt="Root Theory logo variations" /></figure>
+          <figure class="gallery-image"><img src="assets/root-theory/typography.png" alt="Root Theory typography and colour" /></figure>
+        </div>
+        <div class="gallery-controls" aria-label="Navigate Root Theory slideshow">
+          <button class="gallery-arrow" type="button" data-direction="-1" aria-label="Previous slide">&lt;</button>
+          <span class="gallery-counter" id="gallery-counter">01/05</span>
+          <button class="gallery-arrow" type="button" data-direction="1" aria-label="Next slide">&gt;</button>
+        </div>
+      </section>
+
+      <aside class="project-panel">
+        <div class="text-box">
+          <h2>Project</h2>
+          <p>
+            Root Theory is a botanical haircare brand system built around the belief that
+            healthy hair begins at the root. The identity combines herbal care, ritual-based
+            routines, and a tactile seal-mark language.
+          </p>
+        </div>
+        <div class="text-box">
+          <h3>Details</h3>
+          <ul>
+            <li>Scope: Brand identity, typography, stationery, posters</li>
+            <li>Format: Brand brief and campaign system</li>
+            <li>Assets: 5 brand slides, 5 stationery pieces, 5 poster applications</li>
+          </ul>
+        </div>
+      </aside>
+
+      <section class="poster-section" aria-label="Root Theory campaign posters">
+        <div class="section-head">
+          <span class="section-label">Posters</span>
+          <p class="statement">Campaign posters and brand applications.</p>
+        </div>
+        <div class="poster-row">
+          <button class="poster-button" type="button" data-full="assets/root-theory/2.png" aria-label="Open Root Theory poster 1"><img src="assets/root-theory/2.png" alt="Root Theory poster 1" /></button>
+          <button class="poster-button" type="button" data-full="assets/root-theory/root-theory-poster.png" aria-label="Open Root Theory product poster"><img src="assets/root-theory/root-theory-poster.png" alt="Root Theory product poster" /></button>
+          <button class="poster-button" type="button" data-full="assets/root-theory/15.png" aria-label="Open Root Theory poster 2"><img src="assets/root-theory/15.png" alt="Root Theory poster 2" /></button>
+          <button class="poster-button" type="button" data-full="assets/root-theory/16.png" aria-label="Open Root Theory poster 3"><img src="assets/root-theory/16.png" alt="Root Theory poster 3" /></button>
+          <button class="poster-button" type="button" data-full="assets/root-theory/17.png" aria-label="Open Root Theory poster 4"><img src="assets/root-theory/17.png" alt="Root Theory poster 4" /></button>
+        </div>
+      </section>
+
+      <section class="poster-section" aria-label="Root Theory stationery and brand applications">
+        <div class="section-head">
+          <span class="section-label">Stationery</span>
+          <p class="statement">Receipt, business card, letterhead, envelope, and bag applications.</p>
+        </div>
+        <div class="stationery-grid">
+          <button class="poster-button" type="button" data-full="assets/root-theory/receipt.png" aria-label="Open Root Theory receipt"><img src="assets/root-theory/receipt.png" alt="Root Theory receipt design" /></button>
+          <button class="poster-button" type="button" data-full="assets/root-theory/business-card.png" aria-label="Open Root Theory business card"><img src="assets/root-theory/business-card.png" alt="Root Theory business card design" /></button>
+          <button class="poster-button" type="button" data-full="assets/root-theory/letterhead.png" aria-label="Open Root Theory letterhead"><img src="assets/root-theory/letterhead.png" alt="Root Theory letterhead design" /></button>
+          <button class="poster-button" type="button" data-full="assets/root-theory/envelope.png" aria-label="Open Root Theory envelope"><img src="assets/root-theory/envelope.png" alt="Root Theory envelope design" /></button>
+          <button class="poster-button" type="button" data-full="assets/root-theory/bag.png" aria-label="Open Root Theory bag"><img src="assets/root-theory/bag.png" alt="Root Theory bag design" /></button>
+        </div>
+      </section>
+    </main>
+
+    <div class="lightbox" id="poster-lightbox" role="dialog" aria-modal="true" aria-label="Poster image viewer">
+      <button class="lightbox-close" type="button" aria-label="Close poster viewer">X</button>
+      <img id="lightbox-image" src="assets/root-theory/2.png" alt="Root Theory poster enlarged" />
+    </div>
+
+    <script>
+      const menuButton = document.querySelector(".menu-toggle");
+      const slides = Array.from(document.querySelectorAll(".gallery-image"));
+      const galleryArrows = Array.from(document.querySelectorAll(".gallery-arrow"));
+      const galleryCounter = document.querySelector("#gallery-counter");
+      const posterButtons = Array.from(document.querySelectorAll(".poster-button"));
+      const lightbox = document.querySelector("#poster-lightbox");
+      const lightboxImage = document.querySelector("#lightbox-image");
+      const lightboxClose = document.querySelector(".lightbox-close");
+      let activeSlide = 0;
+
+      function setMenu(open) {
+        document.body.classList.toggle("menu-open", open);
+        menuButton.setAttribute("aria-expanded", String(open));
+        menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      }
+
+      function showSlide(next) {
+        activeSlide = (next + slides.length) % slides.length;
+        slides.forEach((slide, index) => slide.classList.toggle("is-active", index === activeSlide));
+        galleryCounter.textContent = `${String(activeSlide + 1).padStart(2, "0")}/${String(slides.length).padStart(2, "0")}`;
+      }
+
+      function setLightbox(open, src) {
+        if (src) lightboxImage.src = src;
+        lightbox.classList.toggle("is-open", open);
+      }
+
+      menuButton.addEventListener("click", () => setMenu(!document.body.classList.contains("menu-open")));
+
+      galleryArrows.forEach((button) => {
+        button.addEventListener("click", () => {
+          showSlide(activeSlide + Number(button.dataset.direction));
+        });
+      });
+
+      posterButtons.forEach((button) => {
+        button.addEventListener("click", () => setLightbox(true, button.dataset.full));
+      });
+
+      lightboxClose.addEventListener("click", () => setLightbox(false));
+      lightbox.addEventListener("click", (event) => {
+        if (event.target === lightbox) setLightbox(false);
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") setLightbox(false);
+      });
+    </script>
+  </body>
+</html>

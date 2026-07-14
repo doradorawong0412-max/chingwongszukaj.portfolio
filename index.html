@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ching Wong Portfolio</title>
+    <meta
+      name="description"
+      content="Ching Wong graphic design portfolio with selected identity, editorial, and print projects."
+    />
+    <style>
+      :root {
+        --bg: #050505;
+        --ink: #f4f1e8;
+        --muted: #a7a49c;
+        --quiet: #5d5a54;
+        --line: rgba(244, 241, 232, 0.18);
+        --accent: #e6c2bf;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Neue Haas Grotesk Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.5;
+        letter-spacing: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a,
+      button {
+        color: inherit;
+        font: inherit;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      button {
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .menu-toggle {
+        position: fixed;
+        top: 22px;
+        left: 22px;
+        z-index: 40;
+        display: inline-grid;
+        place-items: center;
+        width: 54px;
+        height: 54px;
+        border: 1px solid var(--line);
+        background: rgba(5, 5, 5, 0.82);
+        color: var(--accent);
+        backdrop-filter: blur(18px);
+      }
+
+      .menu-toggle::before,
+      .menu-toggle::after {
+        content: "";
+        width: 18px;
+        height: 1px;
+        background: currentColor;
+        box-shadow: 0 7px 0 currentColor;
+        transition: transform 180ms ease, box-shadow 180ms ease;
+      }
+
+      .menu-toggle::after {
+        display: none;
+      }
+
+      body.menu-open .menu-toggle::before {
+        transform: rotate(45deg);
+        box-shadow: 0 0 0 currentColor;
+      }
+
+      body.menu-open .menu-toggle::after {
+        display: block;
+        position: absolute;
+        transform: rotate(-45deg);
+      }
+
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 30;
+        display: grid;
+        width: min(390px, calc(100vw - 28px));
+        padding: 104px 28px 28px;
+        border-right: 1px solid var(--line);
+        background: rgba(5, 5, 5, 0.96);
+        backdrop-filter: blur(22px);
+        transform: translateX(-100%);
+        transition: transform 260ms ease;
+      }
+
+      body.menu-open .sidebar {
+        transform: translateX(0);
+      }
+
+      .side-kicker,
+      .side-note,
+      .project-type,
+      .section-label,
+      .image-count {
+        color: var(--quiet);
+        font-size: 10px;
+        line-height: 1.1;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .side-name {
+        display: block;
+        margin-top: 12px;
+        color: var(--ink);
+        font-size: 30px;
+        font-weight: 300;
+        line-height: 1.02;
+      }
+
+      .side-nav {
+        align-self: center;
+        display: grid;
+        gap: 14px;
+      }
+
+      .side-nav a {
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        gap: 12px;
+        align-items: baseline;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 17px;
+        transition: color 180ms ease;
+      }
+
+      .side-nav a:hover,
+      .side-nav a:focus-visible {
+        color: var(--accent);
+      }
+
+      .side-nav span:first-child {
+        color: var(--quiet);
+        font-size: 10px;
+      }
+
+      .side-footer {
+        align-self: end;
+        display: grid;
+        gap: 13px;
+      }
+
+      .side-footer a,
+      .contact-link {
+        width: max-content;
+        border-bottom: 1px solid var(--accent);
+        color: var(--accent);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .page {
+        min-height: 100vh;
+      }
+
+      .home {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 28px;
+        padding: 32px 32px 28px 96px;
+      }
+
+      .home-head {
+        display: flex;
+        align-items: end;
+        min-height: 128px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h1 {
+        max-width: 980px;
+        margin: 0;
+        font-size: clamp(64px, 12vw, 184px);
+        font-weight: 300;
+        line-height: 0.88;
+        letter-spacing: 0;
+      }
+
+      .slideshow {
+        display: none;
+      }
+
+      .home-intro {
+        align-self: end;
+        max-width: 720px;
+        display: grid;
+        gap: 24px;
+        padding-bottom: 42px;
+      }
+
+      .home-intro p {
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(22px, 3.2vw, 48px);
+        font-weight: 300;
+        line-height: 1.08;
+      }
+
+      .view-work {
+        width: max-content;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .section {
+        padding: 82px 32px 82px 96px;
+        border-top: 1px solid var(--line);
+      }
+
+      .page > .section {
+        display: none;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(140px, 0.18fr) minmax(0, 1fr);
+        gap: 28px;
+        margin-bottom: 28px;
+      }
+
+      .statement {
+        max-width: 900px;
+        margin: 0;
+        font-size: clamp(30px, 4.1vw, 64px);
+        font-weight: 300;
+        line-height: 1.02;
+      }
+
+      .project-index {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 38px;
+      }
+
+      .project-card {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 4 / 5;
+        border: 1px solid var(--line);
+        background: #111;
+      }
+
+      .project-card img {
+        filter: grayscale(1) contrast(1.08);
+        transition: transform 420ms ease, filter 420ms ease;
+      }
+
+      .project-card:hover img,
+      .project-card:focus-visible img {
+        filter: grayscale(0.45) contrast(1.14);
+        transform: scale(1.035);
+      }
+
+      .project-card span {
+        position: absolute;
+        left: 14px;
+        bottom: 12px;
+        color: var(--ink);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .project-detail {
+        display: none;
+        grid-template-columns: minmax(0, 0.68fr) minmax(260px, 0.32fr);
+        gap: 22px;
+        align-items: stretch;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+      }
+
+      .project-detail.is-active {
+        display: grid;
+      }
+
+      .gallery {
+        display: grid;
+        grid-template-rows: minmax(420px, 1fr) auto;
+        gap: 12px;
+      }
+
+      .gallery-stage {
+        position: relative;
+        overflow: hidden;
+        min-height: 420px;
+        border: 1px solid var(--line);
+        background: #111;
+      }
+
+      .gallery-image {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .gallery-image.is-active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .gallery-image img {
+        filter: grayscale(1) contrast(1.06);
+      }
+
+      .gallery-thumbs {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .project-text {
+        display: grid;
+        gap: 12px;
+      }
+
+      .text-box {
+        min-height: 118px;
+        padding: 15px;
+        border: 1px solid var(--line);
+      }
+
+      .text-box h2,
+      .text-box h3 {
+        margin: 0 0 18px;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 1.1;
+      }
+
+      .text-box p,
+      .text-box ul {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .text-box ul {
+        padding: 0;
+        list-style: none;
+      }
+
+      .text-box li + li {
+        margin-top: 7px;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+
+      .info-grid .text-box {
+        border: 0;
+        background: var(--bg);
+      }
+
+      .contact-layout,
+      .cv-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      @media (max-width: 980px) {
+        .home,
+        .section {
+          padding-right: 16px;
+          padding-left: 16px;
+        }
+
+        .home {
+          padding-top: 92px;
+        }
+
+        .home-head,
+        .section-head,
+        .project-detail,
+        .contact-layout,
+        .cv-list {
+          grid-template-columns: 1fr;
+        }
+
+        .project-index {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .slideshow {
+          aspect-ratio: 4 / 5;
+        }
+
+        .gallery {
+          grid-template-rows: minmax(360px, 62vh) auto;
+        }
+
+        .gallery-stage {
+          min-height: 360px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .menu-toggle {
+          top: 16px;
+          left: 16px;
+          width: 48px;
+          height: 48px;
+        }
+
+        h1 {
+          font-size: clamp(58px, 18vw, 88px);
+        }
+
+        .project-index,
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 1ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 1ms !important;
+        }
+      }
+      body { animation: pageFade 520ms ease both; }
+      a, button, .project-card, .photo-button, .poster, .board img, .gallery-image img, .gallery-image video { transition: transform 220ms ease, opacity 220ms ease, filter 220ms ease, border-color 220ms ease, color 220ms ease, background 220ms ease; }
+      main > * { animation: contentRise 680ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+      main > *:nth-child(2) { animation-delay: 80ms; }
+      main > *:nth-child(3) { animation-delay: 150ms; }
+      .side-nav a:hover, .side-nav a:focus-visible, .back-link:hover, .contact-link:hover, .view-work:hover { transform: translateX(4px); }
+      .project-card:hover, .photo-button:hover, .poster:hover { transform: translateY(-3px); }
+      .board:hover img, .poster:hover img, .hero-image:hover img { transform: scale(1.015); }
+      .menu-toggle:hover { border-color: var(--accent); transform: rotate(2deg); }
+       @keyframes pageFade { from { opacity: 0; } to { opacity: 1; } }
+       @keyframes contentRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+       @media (prefers-reduced-motion: reduce) { body, main > * { animation: none !important; } }
+    </style>
+  </head>
+  <body>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"></button>
+
+    <aside class="sidebar" aria-label="Portfolio menu">
+      <a class="side-brand" href="#home">
+        <span class="side-kicker">Graphic Design</span>
+        <span class="side-name">Ching Wong</span>
+      </a>
+
+      <nav class="side-nav" aria-label="Main navigation">
+        <a href="projects.html"><span>01</span><span>Projects</span></a>
+        <a href="photography.html"><span>02</span><span>Photography</span></a>
+        <a href="about.html"><span>03</span><span>About</span></a>
+        <a href="contact.html"><span>04</span><span>Contact</span></a>
+        <a href="cv.html"><span>05</span><span>CV</span></a>
+      </nav>
+
+      <div class="side-footer">
+        <span class="side-note">Identity / Editorial / Print</span>
+        <a href="mailto:orfediawong@icloud.com">orfediawong@icloud.com</a>
+      </div>
+    </aside>
+
+    <main class="page">
+      <section class="home" id="home" aria-labelledby="page-title">
+        <div class="home-head">
+          <h1 id="page-title">Ching Wong</h1>
+        </div>
+
+        <div class="home-intro">
+          <p>Graphic design, identity, editorial, and print work with a clean black editorial frame.</p>
+          <a class="view-work" href="projects.html">View selected work</a>
+        </div>
+      </section>
+
+      <section class="section" id="projects" aria-label="Projects">
+        <div class="section-head">
+          <span class="section-label">Projects</span>
+          <p class="statement">Selected work index.</p>
+        </div>
+
+        <div class="project-index" aria-label="Project list">
+          <a class="project-card is-active" href="goalzzxd.html" data-project="0">
+            <img src="assets/goalzzxd/1.png" alt="goalzzxd project preview" />
+            <span>01 goalzzxd</span>
+          </a>
+          <button class="project-card" type="button" data-project="1">
+            <img src="assets/project-02.png" alt="Archive Volume preview" />
+            <span>02 Archive Volume</span>
+          </button>
+          <button class="project-card" type="button" data-project="2">
+            <img src="assets/project-03.png" alt="Object Notes preview" />
+            <span>03 Object Notes</span>
+          </button>
+          <button class="project-card" type="button" data-project="3">
+            <img src="assets/project-01.png" alt="Signal Study preview" />
+            <span>04 Signal Study</span>
+          </button>
+          <button class="project-card" type="button" data-project="4">
+            <img src="assets/project-02.png" alt="Room Index preview" />
+            <span>05 Room Index</span>
+          </button>
+          <button class="project-card" type="button" data-project="5">
+            <img src="assets/project-03.png" alt="Trace Notes preview" />
+            <span>06 Trace Notes</span>
+          </button>
+        </div>
+
+        <div class="project-detail is-active" data-project-page="0">
+          <div class="gallery" data-gallery>
+            <div class="gallery-stage">
+              <figure class="gallery-image is-active"><img src="assets/project-01.png" alt="Index System artwork 1" /></figure>
+              <figure class="gallery-image"><img src="assets/project-02.png" alt="Index System artwork 2" /></figure>
+              <figure class="gallery-image"><img src="assets/project-03.png" alt="Index System artwork 3" /></figure>
+            </div>
+            <div class="gallery-thumbs">
+              <span class="image-count">Images</span>
+              <button class="thumb-button is-active" type="button" data-image="0" aria-label="Show image 1"></button>
+              <button class="thumb-button" type="button" data-image="1" aria-label="Show image 2"></button>
+              <button class="thumb-button" type="button" data-image="2" aria-label="Show image 3"></button>
+            </div>
+          </div>
+          <div class="project-text">
+            <div class="text-box"><span class="project-type">01 / Identity</span><h2>Index System</h2><p>A disciplined identity system built from scale, rhythm, narrow type, and precise monochrome tension.</p></div>
+            <div class="info-grid"><div class="text-box"><h3>Scope</h3><p>Identity system</p></div><div class="text-box"><h3>Role</h3><p>Design direction</p></div><div class="text-box"><h3>Year</h3><p>2026</p></div></div>
+            <div class="text-box"><h3>Notes</h3><p>For a culture-led studio needing a sharp, quiet visual language across print and digital surfaces.</p></div>
+          </div>
+        </div>
+
+        <div class="project-detail" data-project-page="1">
+          <div class="gallery" data-gallery>
+            <div class="gallery-stage">
+              <figure class="gallery-image is-active"><img src="assets/project-02.png" alt="Archive Volume artwork 1" /></figure>
+              <figure class="gallery-image"><img src="assets/project-01.png" alt="Archive Volume artwork 2" /></figure>
+              <figure class="gallery-image"><img src="assets/project-03.png" alt="Archive Volume artwork 3" /></figure>
+            </div>
+            <div class="gallery-thumbs">
+              <span class="image-count">Images</span>
+              <button class="thumb-button is-active" type="button" data-image="0" aria-label="Show image 1"></button>
+              <button class="thumb-button" type="button" data-image="1" aria-label="Show image 2"></button>
+              <button class="thumb-button" type="button" data-image="2" aria-label="Show image 3"></button>
+            </div>
+          </div>
+          <div class="project-text">
+            <div class="text-box"><span class="project-type">02 / Editorial</span><h2>Archive Volume</h2><p>A book and catalogue system using image rhythm, modular spacing, and restrained typography.</p></div>
+            <div class="info-grid"><div class="text-box"><h3>Scope</h3><p>Catalogue system</p></div><div class="text-box"><h3>Role</h3><p>Editorial design</p></div><div class="text-box"><h3>Year</h3><p>2025</p></div></div>
+            <div class="text-box"><h3>Notes</h3><p>Built for slow reading, quiet sequencing, and strong image-text relationships.</p></div>
+          </div>
+        </div>
+
+        <div class="project-detail" data-project-page="2">
+          <div class="gallery" data-gallery>
+            <div class="gallery-stage">
+              <figure class="gallery-image is-active"><img src="assets/project-03.png" alt="Object Notes artwork 1" /></figure>
+              <figure class="gallery-image"><img src="assets/project-02.png" alt="Object Notes artwork 2" /></figure>
+              <figure class="gallery-image"><img src="assets/project-01.png" alt="Object Notes artwork 3" /></figure>
+            </div>
+            <div class="gallery-thumbs">
+              <span class="image-count">Images</span>
+              <button class="thumb-button is-active" type="button" data-image="0" aria-label="Show image 1"></button>
+              <button class="thumb-button" type="button" data-image="1" aria-label="Show image 2"></button>
+              <button class="thumb-button" type="button" data-image="2" aria-label="Show image 3"></button>
+            </div>
+          </div>
+          <div class="project-text">
+            <div class="text-box"><span class="project-type">03 / Print</span><h2>Object Notes</h2><p>A tactile print and packaging language with off-white stock, black ink, and quiet hierarchy.</p></div>
+            <div class="info-grid"><div class="text-box"><h3>Scope</h3><p>Packaging</p></div><div class="text-box"><h3>Role</h3><p>Print design</p></div><div class="text-box"><h3>Year</h3><p>2025</p></div></div>
+            <div class="text-box"><h3>Notes</h3><p>Designed around material contrast, small marks, and controlled negative space.</p></div>
+          </div>
+        </div>
+
+        <div class="project-detail" data-project-page="3">
+          <div class="gallery" data-gallery>
+            <div class="gallery-stage">
+              <figure class="gallery-image is-active"><img src="assets/project-01.png" alt="Signal Study artwork 1" /></figure>
+              <figure class="gallery-image"><img src="assets/project-03.png" alt="Signal Study artwork 2" /></figure>
+              <figure class="gallery-image"><img src="assets/project-02.png" alt="Signal Study artwork 3" /></figure>
+            </div>
+            <div class="gallery-thumbs">
+              <span class="image-count">Images</span>
+              <button class="thumb-button is-active" type="button" data-image="0" aria-label="Show image 1"></button>
+              <button class="thumb-button" type="button" data-image="1" aria-label="Show image 2"></button>
+              <button class="thumb-button" type="button" data-image="2" aria-label="Show image 3"></button>
+            </div>
+          </div>
+          <div class="project-text">
+            <div class="text-box"><span class="project-type">04 / Campaign</span><h2>Signal Study</h2><p>A high-contrast campaign language built around repetition, cropped typography, and sharp spacing.</p></div>
+            <div class="info-grid"><div class="text-box"><h3>Scope</h3><p>Campaign system</p></div><div class="text-box"><h3>Role</h3><p>Art direction</p></div><div class="text-box"><h3>Year</h3><p>2024</p></div></div>
+            <div class="text-box"><h3>Notes</h3><p>Designed for posters, digital announcements, and a compact launch sequence.</p></div>
+          </div>
+        </div>
+
+        <div class="project-detail" data-project-page="4">
+          <div class="gallery" data-gallery>
+            <div class="gallery-stage">
+              <figure class="gallery-image is-active"><img src="assets/project-02.png" alt="Room Index artwork 1" /></figure>
+              <figure class="gallery-image"><img src="assets/project-03.png" alt="Room Index artwork 2" /></figure>
+              <figure class="gallery-image"><img src="assets/project-01.png" alt="Room Index artwork 3" /></figure>
+            </div>
+            <div class="gallery-thumbs">
+              <span class="image-count">Images</span>
+              <button class="thumb-button is-active" type="button" data-image="0" aria-label="Show image 1"></button>
+              <button class="thumb-button" type="button" data-image="1" aria-label="Show image 2"></button>
+              <button class="thumb-button" type="button" data-image="2" aria-label="Show image 3"></button>
+            </div>
+          </div>
+          <div class="project-text">
+            <div class="text-box"><span class="project-type">05 / Exhibition</span><h2>Room Index</h2><p>A gallery identity and publication system using quiet wayfinding logic and institutional type.</p></div>
+            <div class="info-grid"><div class="text-box"><h3>Scope</h3><p>Exhibition identity</p></div><div class="text-box"><h3>Role</h3><p>Visual system</p></div><div class="text-box"><h3>Year</h3><p>2024</p></div></div>
+            <div class="text-box"><h3>Notes</h3><p>Made to feel controlled, archival, and useful across spatial and printed formats.</p></div>
+          </div>
+        </div>
+
+        <div class="project-detail" data-project-page="5">
+          <div class="gallery" data-gallery>
+            <div class="gallery-stage">
+              <figure class="gallery-image is-active"><img src="assets/project-03.png" alt="Trace Notes artwork 1" /></figure>
+              <figure class="gallery-image"><img src="assets/project-01.png" alt="Trace Notes artwork 2" /></figure>
+              <figure class="gallery-image"><img src="assets/project-02.png" alt="Trace Notes artwork 3" /></figure>
+            </div>
+            <div class="gallery-thumbs">
+              <span class="image-count">Images</span>
+              <button class="thumb-button is-active" type="button" data-image="0" aria-label="Show image 1"></button>
+              <button class="thumb-button" type="button" data-image="1" aria-label="Show image 2"></button>
+              <button class="thumb-button" type="button" data-image="2" aria-label="Show image 3"></button>
+            </div>
+          </div>
+          <div class="project-text">
+            <div class="text-box"><span class="project-type">06 / Printed Matter</span><h2>Trace Notes</h2><p>A small-format print series exploring material contrast, close typography, and object-led storytelling.</p></div>
+            <div class="info-grid"><div class="text-box"><h3>Scope</h3><p>Print series</p></div><div class="text-box"><h3>Role</h3><p>Layout design</p></div><div class="text-box"><h3>Year</h3><p>2023</p></div></div>
+            <div class="text-box"><h3>Notes</h3><p>Created as a tactile system for cards, inserts, and a compact booklet.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="about" aria-labelledby="about-title">
+        <div class="section-head">
+          <span class="section-label" id="about-title">About</span>
+          <p class="statement">Graphic designer based in Hong Kong &amp; Berlin, working through identity, web direction, and editorial systems.</p>
+        </div>
+      </section>
+
+      <section class="section" id="contact" aria-labelledby="contact-title">
+        <div class="section-head">
+          <span class="section-label" id="contact-title">Contact</span>
+          <p class="statement">Available for selected identity, editorial, and print commissions.</p>
+        </div>
+        <div class="contact-layout">
+          <div class="text-box"><h2>Email</h2><a class="contact-link" href="mailto:orfediawong@icloud.com">orfediawong@icloud.com</a></div>
+          <div class="text-box"><h2>Social</h2><p>@orfediaarchives<br />Instagram</p></div>
+        </div>
+      </section>
+
+      <section class="section" id="cv" aria-labelledby="cv-title">
+        <div class="section-head">
+          <span class="section-label" id="cv-title">Curriculum Vitae</span>
+          <p class="statement">Curriculum Vitae</p>
+        </div>
+        <div class="cv-list">
+          <div class="text-box"><h2>Practice</h2><ul><li>Brand identity systems</li><li>Editorial design</li><li>Campaign art direction</li><li>Packaging and print</li></ul></div>
+          <div class="text-box"><h2>Experience</h2><ul><li>Freelance designer, 2023-present</li><li>Studio collaborations</li><li>Cultural and independent clients</li><li>Remote commissions</li></ul></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const menuButton = document.querySelector(".menu-toggle");
+      const navLinks = Array.from(document.querySelectorAll(".side-nav a, .side-brand"));
+      const projectCards = Array.from(document.querySelectorAll(".project-card"));
+      const projectPages = Array.from(document.querySelectorAll("[data-project-page]"));
+
+      function setMenu(open) {
+        document.body.classList.toggle("menu-open", open);
+        menuButton.setAttribute("aria-expanded", String(open));
+        menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      }
+
+      function showProject(next) {
+        projectCards.forEach((card, index) => card.classList.toggle("is-active", index === next));
+        projectPages.forEach((page, index) => page.classList.toggle("is-active", index === next));
+      }
+
+      menuButton.addEventListener("click", () => setMenu(!document.body.classList.contains("menu-open")));
+      navLinks.forEach((link) => link.addEventListener("click", () => setMenu(false)));
+
+      projectCards.forEach((card) => {
+        card.addEventListener("click", () => {
+          showProject(Number(card.dataset.project));
+          document.querySelector(".project-detail.is-active").scrollIntoView({ block: "nearest" });
+        });
+      });
+
+      document.querySelectorAll("[data-gallery]").forEach((gallery) => {
+        const images = Array.from(gallery.querySelectorAll(".gallery-image"));
+        const thumbs = Array.from(gallery.querySelectorAll(".thumb-button"));
+        thumbs.forEach((thumb) => {
+          thumb.addEventListener("click", () => {
+            const next = Number(thumb.dataset.image);
+            images.forEach((image, index) => image.classList.toggle("is-active", index === next));
+            thumbs.forEach((item, index) => item.classList.toggle("is-active", index === next));
+          });
+        });
+      });
+
+    </script>
+  </body>
+</html>
